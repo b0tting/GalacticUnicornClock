@@ -12,9 +12,9 @@ except ImportError:
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
 try:
-    from numbers import NUMBERS, COLON, NUMBER_NONE
+    from unicorn_digits import NUMBERS, COLON, NUMBER_NONE
 except ImportError:
-    print("Numbers are kept in numbers.py, please add them there and upload the numbers.py!")
+    print("Numbers are kept in unicorn_digits.py, please add them there and upload the numbers.py!")
     raise
 galactic = GalacticUnicorn()
 graphics = PicoGraphics(DISPLAY)
@@ -123,7 +123,8 @@ def draw_number(number, offset):
 def set_up_characters(hour, minute):
     number_collection = []
     if hour < 10:
-        number_collection.append(NUMBERS[0])
+        number_collection.append(NUMBER_NONE)
+        number_collection.append(NUMBERS[hour])
     else:
         number_collection.append(NUMBERS[hour // 10])
         number_collection.append(NUMBERS[hour % 10])
