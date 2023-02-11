@@ -8,3 +8,7 @@ WIFI_PASSWORD = "..."
 
 `clock.py` is a clock with a slightly modified version of the rainbow example as the background.
 The time synchronises using NTP on start and at 5am every day.  This sets to UTC, you can adjust the hour with the volume up/down buttons.
+
+![clock.jpg](clock.jpg)
+
+To modify the numbers, see the "numbers.py" file. The digits in the array represent the pen colors in the "pens" array. 
