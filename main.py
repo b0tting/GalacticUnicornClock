@@ -4,24 +4,29 @@ import math
 import network
 import ntptime
 import machine
+
 try:
     from secrets import WIFI_SSID, WIFI_PASSWORD
 except ImportError:
-    print("WiFi secrets are kept in secrets.py, please add them there and upload the secrets.py!")
+    print(
+        "WiFi secrets are kept in secrets.py, please add them there and upload the secrets.py!"
+    )
     raise
 from galactic import GalacticUnicorn
 from picographics import PicoGraphics, DISPLAY_GALACTIC_UNICORN as DISPLAY
+
 try:
     from unicorn_digits import NUMBERS, COLON, NUMBER_NONE
 except ImportError:
-    print("Numbers are kept in unicorn_digits.py, please add them there and upload the numbers.py!")
+    print(
+        "Numbers are kept in unicorn_digits.py, please add them there and upload the numbers.py!"
+    )
     raise
 galactic = GalacticUnicorn()
 graphics = PicoGraphics(DISPLAY)
 
 width = GalacticUnicorn.WIDTH
 height = GalacticUnicorn.HEIGHT
-
 
 
 def sync_time():
@@ -44,8 +49,10 @@ def sync_time():
 
         try:
             ntptime.settime()
+            global utc_offset
+            utc_offset = org_utc_offset
             print("Time set")
-        except:
+        except Exception as e:
             pass
 
     wlan.disconnect()
@@ -95,7 +102,9 @@ stripe_width = 6.0
 light = 10
 old_day = 0
 old_hour = 4
-utc_offset = 1
+org_utc_offset = 1
+utc_offset = org_utc_offset
+minutes_offset = 0
 brightness_adjust = 0.2
 clear_pen = graphics.create_pen(0, 0, 0)
 
@@ -141,16 +150,15 @@ def draw_clock(number_collection):
         offset += len(number[0])
 
 
-def adjust_utc_offset(pin):
-    global utc_offset
-    if pin == up_button:
-        utc_offset += 1
-    if pin == down_button:
-        utc_offset -= 1
+up_button.irq(
+    trigger=machine.Pin.IRQ_FALLING,
+    handler=lambda x: globals().update(utc_offset=utc_offset + 1)
+)
 
-
-up_button.irq(trigger=machine.Pin.IRQ_FALLING, handler=adjust_utc_offset)
-down_button.irq(trigger=machine.Pin.IRQ_FALLING, handler=adjust_utc_offset)
+down_button.irq(
+    trigger=machine.Pin.IRQ_FALLING,
+    handler=lambda x: globals().update(minutes_offset=minutes_offset + 1)
+)
 
 while True:
     if galactic.is_pressed(GalacticUnicorn.SWITCH_BRIGHTNESS_UP):
@@ -176,6 +184,7 @@ while True:
 
     year, month, day, hour, minute, second, _, _ = time.localtime()
     hour = (hour + utc_offset) % 24
+    minute = (minute + minutes_offset) % 60
     digits = set_up_characters(hour, minute)
     draw_clock(digits)
 

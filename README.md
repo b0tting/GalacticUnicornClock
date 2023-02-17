@@ -12,3 +12,13 @@ The time synchronises using NTP on start and at 5am every day.  This sets to UTC
 ![clock.jpg](clock.jpg)
 
 To modify the numbers, see the "numbers.py" file. The digits in the array represent the pen colors in the "pens" array. 
+
+
+### Button functions
+| Button | Function            |
+|--------|---------------------|
+| VOL +  | Increase hour       |
+| VOL -  | Increase minutes    |
+| zzz    | Sync time with NTP  |
+| LUX +  | Increase brightness |
+| LUX -  | Decrease brightness |
