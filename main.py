@@ -152,12 +152,12 @@ def draw_clock(number_collection):
 
 up_button.irq(
     trigger=machine.Pin.IRQ_FALLING,
-    handler=lambda x: globals().update(utc_offset=utc_offset + 1)
+    handler=lambda x: globals().update(utc_offset=utc_offset + 1),
 )
 
 down_button.irq(
     trigger=machine.Pin.IRQ_FALLING,
-    handler=lambda x: globals().update(minutes_offset=minutes_offset + 1)
+    handler=lambda x: globals().update(minutes_offset=minutes_offset + 1),
 )
 
 while True:
@@ -185,6 +185,8 @@ while True:
     year, month, day, hour, minute, second, _, _ = time.localtime()
     hour = (hour + utc_offset) % 24
     minute = (minute + minutes_offset) % 60
+    if minute == 0:  # Brain broken, can't figure out why I need this
+        hour += 1
     digits = set_up_characters(hour, minute)
     draw_clock(digits)
 
