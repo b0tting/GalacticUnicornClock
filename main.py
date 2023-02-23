@@ -152,7 +152,7 @@ def draw_clock(number_collection):
 
 up_button.irq(
     trigger=machine.Pin.IRQ_FALLING,
-    handler=lambda x: globals().update(utc_offset=utc_offset + 1),
+    handler=lambda x: globals().update(utc_offset=(utc_offset + 1) % 24),
 )
 
 down_button.irq(
