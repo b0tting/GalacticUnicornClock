@@ -11,6 +11,7 @@ You can use the buttons to set the time, but you can also use an online NTP serv
 WIFI_SSID = "..."
 WIFI_PASSWORD = "..." 
 ```
+
 The time synchronises using NTP on start and at 5am every day. You might need to change the hour as the time retrieved is in UTC. 
 
 ![clock.jpg](clock.jpg)
