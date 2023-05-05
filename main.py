@@ -6,7 +6,7 @@ import ntptime
 import machine
 
 try:
-    from secrets import WIFI_SSID, WIFI_PASSWORD
+    from secrets import WIFI_SSID, WIFI_PASSWORD, NTP_HOST
 except ImportError:
     print(
         "WiFi secrets are kept in secrets.py, please add them there and upload the secrets.py!"
@@ -19,7 +19,7 @@ try:
     from unicorn_digits import NUMBERS, COLON, NUMBER_NONE
 except ImportError:
     print(
-        "Numbers are kept in unicorn_digits.py, please add them there and upload the numbers.py!"
+        "Numbers are kept in unicorn_digits.py, please add them there and upload the unicorn_digits.py!"
     )
     raise
 galactic = GalacticUnicorn()
@@ -46,14 +46,14 @@ def sync_time():
 
     if max_wait > 0 and wlan.status() >= 3:
         print("Connected")
-
         try:
+            ntptime.host = NTP_HOST
             ntptime.settime()
             global utc_offset
             utc_offset = org_utc_offset
             print("Time set")
         except Exception as e:
-            pass
+            print(e)
 
     wlan.disconnect()
     wlan.active(False)
